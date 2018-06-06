@@ -1,0 +1,402 @@
+@font-face {
+    font-family: LeTour;
+    src: url(WCManoNegraBta.ttf);
+}
+
+html,
+body {
+  font-family: "Avenir Next W01","Avenir Next W00","Avenir Next","Avenir","Helvetica Neue",sans-serif;
+  font-size: 14px;
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+
+#mainMap {
+	height: 100%;
+}
+
+.btn#btnGoToApp {
+	font-family: 'LeTour';
+  background-color: transparent;
+  color: whitesmoke;
+  border-color: whitesmoke;
+  font-size: 1.5rem;
+  -webkit-animation: moving 5s ease-in-out;
+	animation: moving 5s ease-in-out;
+}
+
+.btn#btnGoToApp:hover{
+  background-color: rgba(255,185,1,0.8);
+  color: #0a000e;
+  border-color: transparent;
+}
+
+.btn#btnResetRoutes{
+	background-color: rgba(255,185,1,0.8);
+  	color: #0a000e;
+  	border-color: transparent;
+}
+
+.btn#btnResetRoutes:hover{
+	background-color: transparent;
+	color:  #0a000e;
+	border-color: rgba(255,185,1,0.8);
+}
+
+.textcontent {
+    color: white;
+    z-index: 2;
+    position: absolute;
+    text-align: center;
+    display: table;
+    width: 100%;
+    top: 55%;
+}
+
+.divider {
+    display: block;
+    margin: 25px auto;
+    width: 40vw;
+    max-width: 50vw;
+    background-color: rgb(255,185,1);
+    height: 2px;
+	position: relative;
+    -webkit-animation: moving 5s ease-in-out;
+	animation: moving 5s ease-in-out;
+	
+}
+
+.title {
+    font-size: 4.3rem;
+    font-weight: lighter;
+    line-height: initial;
+    position: relative;
+    -webkit-animation: moving 5s ease-in-out;
+    animation: moving 5s ease-in-out;
+}
+
+#logo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 5;
+}
+
+#logo:hover {
+  transform: scale(1.1);
+}
+
+@-webkit-keyframes moving {
+    from {bottom: -500px;}
+    to {bottom: 0px;}
+}
+
+@keyframes moving {
+    from {bottom: -500px;}
+    to {bottom: 0px;}
+}
+
+@media (max-width: 600px) {
+  .title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 820px) {
+  .title {
+    font-size: 2rem;
+  }
+}
+
+
+*, *:after, *:before { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+body, html { font-size: 100%; padding: 0; margin: 0; height: 100%;}
+
+/* Clearfix hack by Nicolas Gallagher: http://nicolasgallagher.com/micro-clearfix-hack/ */
+.clearfix:before, .clearfix:after { content: " "; display: table; }
+.clearfix:after { clear: both; }
+
+a {
+	color: #f0f0f0;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #fff;
+}
+
+a.tab-title{
+	color: black;
+}
+
+#os-phrases h2 {
+	font-family: "LeTour";
+	font-size: 3.1rem;
+	color: white;
+    z-index: 2;
+}
+
+/* Header Style */
+.codrops-top {
+	text-transform: uppercase;
+	position: relative;
+	z-index: 1000;
+	font-size: 0.68em;
+	border-bottom: 1px solid rgba(255,255,255,0.2);
+	line-height: 2.2;
+}
+
+.codrops-top a {
+	padding: 0 1em;
+	letter-spacing: 0.1em;
+	color: rgba(255,255,255,0.2);
+	display: inline-block;
+}
+
+.codrops-top a:hover {
+	color: rgba(255,255,255,0.9);
+}
+
+.codrops-top span.right {
+	float: right;
+}
+
+.codrops-top span.right a {
+	float: left;
+	display: block;
+}
+
+.os-phrases h2 {
+	font-size: 30px;
+	font-weight: 200;
+	width: 100%;
+	overflow: hidden;
+	text-transform: uppercase;
+	padding: 0;
+	margin: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	letter-spacing: 2px;
+	text-align: center;
+	opacity: 0;
+}
+
+.os-phrases h2,
+.os-phrases h2 > span {
+	height: 100%;
+	/* Centering with flexbox */
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: row;
+	-ms-flex-direction: row;
+	flex-direction: row;
+	-webkit-box-pack: center;
+	-moz-box-pack: center;
+	-webkit-justify-content: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	-webkit-box-align: center;
+	-moz-box-align: center;
+	-webkit-align-items: center;
+	-ms-flex-align: center;
+	align-items: center;
+}
+
+.os-phrases h2 > span {
+	margin: 0 15px;
+}
+
+.os-phrases h2 > span > span {
+	display: inline-block;
+	-webkit-perspective: 1000px;
+	-moz-perspective: 1000px;
+	perspective: 1000px;
+	-webkit-transform-origin: 50% 50%;
+	-moz-transform-origin: 50% 50%;
+	transform-origin: 50% 50%;
+}
+
+.os-phrases h2 > span > span > span {
+	display: inline-block;
+	color: hsla(0,0%,0%,0);
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+	-webkit-transform: translate3d(0,0,0);
+	-moz-transform: translate3d(0,0,0);
+	transform: translate3d(0,0,0);
+	-webkit-animation: OpeningSequence 5.2s linear forwards;
+	-moz-animation: OpeningSequence 5.2s linear forwards;
+	animation: OpeningSequence 5.2s linear forwards;
+}
+
+.os-phrases h2:nth-child(2) > span > span > span {
+	-webkit-animation-delay: 5s;
+	-moz-animation-delay: 5s;
+	animation-delay: 5s;
+}
+
+.os-phrases h2:nth-child(3) > span > span > span {
+	-webkit-animation-delay: 10s;
+	-moz-animation-delay: 10s;
+	animation-delay: 10s;
+}
+
+.os-phrases h2:nth-child(4) > span > span > span {
+	-webkit-animation-delay: 15s;
+	-moz-animation-delay: 15s;
+	animation-delay: 15s;
+}
+
+.os-phrases h2:nth-child(5) > span > span > span {
+	font-size: 150px;
+	-webkit-animation-delay: 21s;
+	-moz-animation-delay: 21s;
+	animation-delay: 21s;
+	-webkit-animation-duration: 8s;
+	-moz-animation-duration: 8s;
+	animation-duration: 8s;
+}
+
+.os-phrases h2:nth-child(6) > span > span > span {
+	-webkit-animation-delay: 30s;
+	-moz-animation-delay: 30s;
+	animation-delay: 30s;
+}
+
+.os-phrases h2:nth-child(7) > span > span > span {
+	-webkit-animation-delay: 34s;
+	-moz-animation-delay: 34s;
+	animation-delay: 34s;
+}
+
+@-webkit-keyframes OpeningSequence {
+	0% {
+		text-shadow: 0 0 50px #fff;
+		letter-spacing: 80px;
+		opacity: 0;
+		-webkit-transform: rotateY(-90deg);
+	}
+	50% {
+		text-shadow: 0 0 1px #fff;
+		letter-spacing: 14px;
+		opacity: 0.8;
+		-webkit-transform: rotateY(0deg);
+	}
+	85% {
+		text-shadow: 0 0 1px #fff;
+		opacity: 0.8;
+		-webkit-transform: rotateY(0deg) translateZ(100px);
+	}
+	100% {
+		text-shadow: 0 0 1px #fff;
+		opacity: 1;
+		transform: translateZ(130px);
+		pointer-events: none;
+	}
+}
+
+@-moz-keyframes OpeningSequence {
+	0% {
+		text-shadow: 0 0 50px #fff;
+		letter-spacing: 80px;
+		opacity: 0.2;
+		-moz-transform: rotateY(-90deg);
+	}
+	50% {
+		text-shadow: 0 0 1px #fff;
+		letter-spacing: 14px;
+		opacity: 0.8;
+		-moz-transform: rotateY(0deg);
+	}
+	85% {
+		text-shadow: 0 0 1px #fff;
+		opacity: 0.8;
+		-moz-transform: rotateY(0deg) translateZ(100px);
+	}
+	100% {
+		text-shadow: 0 0 1px #fff;
+		opacity: 1;
+		transform: translateZ(130px);
+		pointer-events: none;
+	}
+}
+
+@keyframes OpeningSequence {
+	0% {
+		text-shadow: 0 0 50px #fff;
+		letter-spacing: 80px;
+		opacity: 0.2;
+		transform: rotateY(-90deg);
+	}
+	50% {
+		text-shadow: 0 0 1px #fff;
+		letter-spacing: 14px;
+		opacity: 0.8;
+		transform: rotateY(0deg);
+	}
+	85% {
+		text-shadow: 0 0 1px #fff;
+		opacity: 0.8;
+		transform: rotateY(0deg) translateZ(100px);
+	}
+	100% {
+		text-shadow: 0 0 1px #fff;
+		opacity: 1;
+		transform: translateZ(130px);
+		pointer-events: none;
+	}
+}
+
+.os-phrases h2:nth-child(8) > span > span > span {
+	font-size: 30px;
+	-webkit-animation: FadeIn 4s linear 40s forwards;
+	-moz-animation: FadeIn 4s linear 40s forwards;
+	animation: FadeIn 4s linear 40s forwards;
+}
+
+@-webkit-keyframes FadeIn { 
+	0% {
+		opacity: 0;
+		text-shadow: 0 0 50px #fff;
+	}
+	100% {
+		opacity: 0.8;
+		text-shadow: 0 0 1px #fff;
+	}
+}
+
+@-moz-keyframes FadeIn { 
+	0% {
+		opacity: 0;
+		text-shadow: 0 0 50px #fff;
+	}
+	100% {
+		opacity: 0.8;
+		text-shadow: 0 0 1px #fff;
+	}
+}
+
+@keyframes FadeIn { 
+	0% {
+		opacity: 0;
+		text-shadow: 0 0 50px #fff;
+	}
+	100% {
+		opacity: 0.8;
+		text-shadow: 0 0 1px #fff;
+	}
+}
+
+/* Bold words */
+.os-phrases h2:first-child .word3,
+.os-phrases h2:nth-child(2) .word2,
+.os-phrases h2:nth-child(4) .word2 {
+	font-weight: 600;
+}

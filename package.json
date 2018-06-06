@@ -1,0 +1,15 @@
+{
+  "name": "tourdefrance2018",
+  "version": "1.0.0",
+  "description": "3D WebGIS app to show tour de france 2018 routes and info in 3D",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev-server": "live-server --port=8081"
+  },
+  "author": "Ionut Alixandroae",
+  "license": "ISC",
+  "dependencies": {
+    "live-server": "^1.2.0"
+  }
+}

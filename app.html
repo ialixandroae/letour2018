@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+    <title>Le Tour de France 2018</title>
+
+    <style>
+        html,
+        body,
+        .grid-container,
+        .column-16,
+        #mainMap {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        .upperPane{
+            margin-top: 5px;
+            border: 1px solid #000;
+            height: 35%;
+        }
+        
+        .lowerPane{
+            margin-top: 5px;
+            border: 1px solid #000;
+            height: 63%;
+            overflow-y: scroll;
+        }
+
+    </style>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.7/esri/css/main.css">
+    <link rel="stylesheet" href="https://s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.0.1/css/calcite-web.min.css">
+    <link rel="stylesheet" href="./style/style.css">
+
+    <script type="text/javascript" src="dojoConfig.js"></script>
+    <script type="text/javascript" src="https://s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.0.1/js/calcite-web.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script src="https://www.amcharts.com/lib/3/serial.js"></script>
+    <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+    <script src="https://js.arcgis.com/4.7/"></script>
+    
+</head>
+
+<body>
+    <div class="grid-container">
+        <div class="column-8" style="border: 1px solid red; height:100%;">
+            <div class="upperPane" id="secondMap"></div>
+            <div class="lowerPane">
+                <div class="tabs-transparent trailer-2 js-tab-group">
+                    <nav class="tab-nav avenir-light">
+                        <a class="tab-title is-active js-tab">Routes</a>
+                        <a class="tab-title js-tab">About</a>
+                    </nav>
+                    <section class="tab-contents">
+                        <article class="tab-section js-tab-section is-active" >
+                            <p>Click on a route below to gain insights</p>
+                            <button class="btn btn-fill" id="btnResetRoutes"> See all routes </button>
+                            <aside class="js-accordion accordion is-active" id="routesAccordion">
+                                
+                            </aside>
+                        </article>
+                        <article class="tab-section js-tab-section" id="tabInfoAndChart">
+                            <p>Select a route from the Routes tab or click a route in the scene to get info</p>
+                        </article>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <div class="column-16">
+            <div id="mainMap"></div>
+        </div>
+    </div>
+    <script>
+        calcite.init();
+    </script>
+</body>
+
+</html>
