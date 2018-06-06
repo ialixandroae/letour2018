@@ -56,6 +56,7 @@
                     <nav class="tab-nav avenir-light">
                         <a class="tab-title is-active js-tab">Routes</a>
                         <a class="tab-title js-tab">About</a>
+                        <a class="tab-title js-tab">Explore</a>
                     </nav>
                     <section class="tab-contents">
                         <article class="tab-section js-tab-section is-active" >
@@ -67,6 +68,39 @@
                         </article>
                         <article class="tab-section js-tab-section" id="tabInfoAndChart">
                             <p>Select a route from the Routes tab or click a route in the scene to get info</p>
+                            
+                        </article>
+                        <article class="tab-section js-tab-section" id="tabExplore">
+                            <p>Filter routes by type</p>
+                            <label class="toggle-switch modifier-class clearfix">
+                                <span class="toggle-switch-label right font-size--1">Flat stage</span>
+                                <input type="checkbox" class="toggle-switch-input" id="toggleFS">
+                                <span class="toggle-switch-track left"></span>
+                            </label>
+
+                            <label class="toggle-switch modifier-class clearfix">
+                                <span class="toggle-switch-label right font-size--1">Team time trial</span>
+                                <input type="checkbox" class="toggle-switch-input" id="toggleTTT">
+                                <span class="toggle-switch-track left"></span>
+                            </label>
+
+                            <label class="toggle-switch modifier-class clearfix">
+                                <span class="toggle-switch-label right font-size--1">Medium mountain stage</span>
+                                <input type="checkbox" class="toggle-switch-input" id="toggleMMS">
+                                <span class="toggle-switch-track left"></span>
+                            </label>
+
+                            <label class="toggle-switch modifier-class clearfix">
+                                <span class="toggle-switch-label right font-size--1">High mountain stage</span>
+                                <input type="checkbox" class="toggle-switch-input" id="toggleHMS">
+                                <span class="toggle-switch-track left"></span>
+                            </label>
+
+                            <label class="toggle-switch modifier-class clearfix">
+                                <span class="toggle-switch-label right font-size--1">Individual time trial</span>
+                                <input type="checkbox" class="toggle-switch-input" id="toggleITT">
+                                <span class="toggle-switch-track left"></span>
+                            </label>
                         </article>
                     </section>
                 </div>

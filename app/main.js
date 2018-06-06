@@ -5,15 +5,17 @@ require([
     "esri/layers/FeatureLayer",
     "esri/tasks/support/Query",
     "../app/createInfoAndChart.js",
+    "../app/filterRoutes.js",
     "dojo/domReady!"
 ], function (Map, MapView, SceneView, FeatureLayer,
-            Query, createInfoAndChart ) {
+            Query, createInfoAndChart, filterRoutes ) {
 
     const routesList = document.getElementById('routesAccordion');
     const btnResetRoutes = document.getElementById('btnResetRoutes');
     const divInfoAndChart = document.getElementById('tabInfoAndChart');
     const createIAC = createInfoAndChart;
-    
+    const fltrRoutes = filterRoutes;
+
     const allRoutes3D = new FeatureLayer({
         url: 'https://services.arcgis.com/WQ9KVmV6xGGMnCiQ/ArcGIS/rest/services/LeTourDeFranceRoute_WFL1/FeatureServer/3'
     });
@@ -57,67 +59,69 @@ require([
             zoom: 7,
             tilt: 40,
             heading: 0
-        });
-    }).then(function () {
-        map2D.add(allRoutes2D);
-        map3D.add(allRoutes3D);
-    }).then(function () {
-        allRoutes2D.queryFeatures()
-            .then(function (results) {
-                const records = results.features;
-                records.map(function (record){
-                    const stageName = record.attributes.Name;
-                    const stageStartFinish = record.attributes.StartFinish;
-                    const stageOverview = record.attributes.Overview;
-                    const routeAccordion = 
-                        `<div class="accordion-section">` +
+        }).then(function () {
+            map3D.add(allRoutes3D);
+            map2D.add(allRoutes2D);
+            fltrRoutes.init([allRoutes2D, allRoutes3D], divInfoAndChart);
+        }).then(function () {
+            allRoutes2D.queryFeatures()
+                .then(function (results) {
+                    const records = results.features;
+                    records.map(function (record) {
+                        const stageName = record.attributes.Name;
+                        const stageStartFinish = record.attributes.StartFinish;
+                        const stageOverview = record.attributes.Overview;
+                        const routeAccordion =
+                            `<div class="accordion-section">` +
                             `<h4 class="accordion-title">` +
-                                `<span class="accordion-icon">` +
-                                    `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 32 32" class="svg-icon">` +
-                                        `<path d="M28 9v5L16 26 4 14V9l12 12L28 9z" />` +
-                                    `</svg>` +
-                                `</span>` +
-                                `${stageStartFinish}` +
+                            `<span class="accordion-icon">` +
+                            `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 32 32" class="svg-icon">` +
+                            `<path d="M28 9v5L16 26 4 14V9l12 12L28 9z" />` +
+                            `</svg>` +
+                            `</span>` +
+                            `${stageStartFinish}` +
                             `</h4>` +
                             `<div class="accordion-content">` +
-                                `<p>${stageName}</p>` +
-                                `<p>${stageOverview}</p>` +
+                            `<p>${stageName}</p>` +
+                            `<p>${stageOverview}</p>` +
                             `</div>` +
-                        `</div>`;
+                            `</div>`;
 
-                    routesList.innerHTML += routeAccordion;
-                     
-                });
-            })
-            .then(function(){
-                Array.from(document.getElementsByClassName('accordion-section')).map(function (element) {
-                    element.addEventListener('click', function(){
-                        element.classList.toggle('is-active');
-                        goToRoute(element);
-                    });
-                });
+                        routesList.innerHTML += routeAccordion;
 
-                btnResetRoutes.addEventListener('click', function(){
-                    resetDivRouteRender(divInfoAndChart);
-                    allRoutes2D.definitionExpression = "1=1";
-                    allRoutes3D.definitionExpression = "1=1";
-                    view3D.goTo({
-                        center: [3, 46],
-                        zoom: 7,
-                        tilt: 40,
-                        heading: 0
-                    });
-                    view2D.goTo({
-                        center: [4.5, 46],
-                        zoom: 5
                     });
                 })
-            })
+                .then(function () {
+                    Array.from(document.getElementsByClassName('accordion-section')).map(function (element) {
+                        element.addEventListener('click', function () {
+                            element.classList.toggle('is-active');
+                            goToRoute(element);
+                        });
+                    });
+
+                    btnResetRoutes.addEventListener('click', function () {
+                        createIAC.resetDivRouteRender(divInfoAndChart);
+                        allRoutes2D.definitionExpression = "1=1";
+                        allRoutes3D.definitionExpression = "1=1";
+                        view3D.goTo({
+                            center: [3, 46],
+                            zoom: 7,
+                            tilt: 40,
+                            heading: 0
+                        });
+                        view2D.goTo({
+                            center: [4.5, 46],
+                            zoom: 5
+                        });
+                    });
+                });
+        });
     });
 
     function goToRoute(element){
         console.log('click rute');
         console.log(Array.from(element.classList))
+        disableCheckboxes();
         if (Array.from(element.classList).includes('is-active')) {
             console.log(element.getElementsByClassName('accordion-title')[0].textContent);
             
@@ -126,13 +130,14 @@ require([
             query.returnGeometry = true;
             query.outFields = ["*"];
             
-            allRoutes3D.definitionExpression = `StartFinish = '${element.getElementsByClassName('accordion-title')[0].textContent}'`;
-            allRoutes2D.definitionExpression = `StartFinish = '${element.getElementsByClassName('accordion-title')[0].textContent}'`;
+            
 
             allRoutes3D.queryFeatures(query)
                 .then(function(route){
                     console.log(route);
                     createIAC.create(element.getElementsByClassName('accordion-title')[0].textContent, route, allRoutes3D, view3D.map.ground.layers.getItemAt(0), divInfoAndChart);
+                    allRoutes3D.definitionExpression = `StartFinish = '${element.getElementsByClassName('accordion-title')[0].textContent}'`;
+                    allRoutes2D.definitionExpression = `StartFinish = '${element.getElementsByClassName('accordion-title')[0].textContent}'`;
                     view3D.goTo(
                         {
                             target: route.features[0].geometry
@@ -143,16 +148,14 @@ require([
                     view2D.goTo(route.features[0].geometry, { duration: 2000, easing: 'ease-in' });
                 });
         }
-        
     };
 
-    function resetDivRouteRender(render){
-        while (render.firstChild) {
-            render.removeChild(render.firstChild);
-        };
-
-        const description = document.createElement('p');
-        description.innerHTML = 'Select a route from the Routes tab or click a route in the scene to get info';
-        render.appendChild(description);
-    };
+    function disableCheckboxes(){
+        const toggles = document.getElementsByClassName('toggle-switch-input');
+        Array.from(toggles).forEach(function(toggle){
+            if(toggle.checked == true){
+                toggle.checked = false;
+            };
+        });
+    }
 });

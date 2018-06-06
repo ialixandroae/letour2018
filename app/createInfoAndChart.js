@@ -195,6 +195,15 @@ define([
                     }
                 });
             });
+        },
+        resetDivRouteRender: function(render){
+            while (render.firstChild) {
+                render.removeChild(render.firstChild);
+            };
+
+            const description = document.createElement('p');
+            description.innerHTML = 'Select a route from the Routes tab or click a route in the scene to get info';
+            render.appendChild(description);
         }
     };
     return clazz;
