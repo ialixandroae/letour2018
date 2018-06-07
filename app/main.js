@@ -1,14 +1,17 @@
 require([
-    "esri/Map",
+    "esri/WebMap",
     "esri/views/MapView",
     "esri/views/SceneView",
+    "esri/WebScene",
     "esri/layers/FeatureLayer",
     "esri/tasks/support/Query",
+    "esri/geometry/Point",
+    "esri/config",
     "../app/createInfoAndChart.js",
     "../app/filterRoutes.js",
     "dojo/domReady!"
-], function (Map, MapView, SceneView, FeatureLayer,
-            Query, createInfoAndChart, filterRoutes ) {
+], function (WebMap, MapView, SceneView, WebScene, FeatureLayer,
+    Query, Point, esriConfig, createInfoAndChart, filterRoutes ) {
 
     const routesList = document.getElementById('routesAccordion');
     const btnResetRoutes = document.getElementById('btnResetRoutes');
@@ -16,36 +19,64 @@ require([
     const createIAC = createInfoAndChart;
     const fltrRoutes = filterRoutes;
 
+    esriConfig.request.corsEnabledServers.push("https://fly.maptiles.arcgis.com");
+    esriConfig.request.corsEnabledServers.push("https://wtb.maptiles.arcgis.com");
+
     const allRoutes3D = new FeatureLayer({
-        url: 'https://services.arcgis.com/WQ9KVmV6xGGMnCiQ/ArcGIS/rest/services/LeTourDeFranceRoute_WFL1/FeatureServer/3'
+        url: 'https://services.arcgis.com/WQ9KVmV6xGGMnCiQ/ArcGIS/rest/services/LeTourDeFranceRoute_WFL1/FeatureServer/3',
+        outFields: ['*'],
+        popupTemplate: {
+            title: '{StartFinish} - {Distance} km',
+            content:
+                '<p>{Name}</p>' +
+                '<p>{Overview}</p>'
+        }
     });
 
     const allRoutes2D = new FeatureLayer({
         url: 'https://services.arcgis.com/WQ9KVmV6xGGMnCiQ/ArcGIS/rest/services/LeTourDeFranceRoute_WFL1/FeatureServer/3',
-        outFields: ['*']
+        outFields: ['*'],
+        popupTemplate: {
+            title: '{StartFinish} - {Distance} km'
+        }
     });
 
     // https://services.arcgis.com/WQ9KVmV6xGGMnCiQ/ArcGIS/rest/services/LeTourDeFranceRoute_WFL1/FeatureServer/3
 
-    const map3D = new Map({
-        basemap: "hybrid",
-        ground: "world-elevation"
+    const map3D = new WebScene({
+        portalItem: {
+            id: "03c915392f55473eaab7db341db741b0"  // ID of the WebScene on arcgis.com
+        }
     });
 
     const view3D = new SceneView({
+        popup: {
+            dockEnabled: true,
+            dockOptions: {
+                position: "top-right",
+                buttonEnabled: false,
+                breakpoint: false,
+            }
+        },
         container: "mainMap",
-        map: map3D,
-        scale: 50000000,
-        center: [-101.17, 21.78]
+        map: map3D
     });
 
-    
-    const map2D = new Map({
-        basemap: "dark-gray"
+    const map2D = new WebMap({
+        portalItem: { 
+            id: "5723dcceab464f3eb6e06caaf353642f"
+        }
     });
 
     
     const view2D = new MapView({
+        popup: {
+            dockEnabled: true,
+            dockOptions: {
+                buttonEnabled: false,
+                breakpoint: false,
+            }
+        },
         container: "secondMap",
         map: map2D,
         zoom: 5,
@@ -102,6 +133,7 @@ require([
                         createIAC.resetDivRouteRender(divInfoAndChart);
                         allRoutes2D.definitionExpression = "1=1";
                         allRoutes3D.definitionExpression = "1=1";
+                        view3D.popup.visible = false
                         view3D.goTo({
                             center: [3, 46],
                             zoom: 7,
@@ -115,6 +147,45 @@ require([
                     });
                 });
         });
+    });
+
+    // Click event 
+    view3D.on("click", event => {
+        view3D.hitTest(event)
+            .then(function (response) {
+                console.log(response);
+                const lat = response.results[0].mapPoint.latitude;
+                const long = response.results[0].mapPoint.longitude;
+                console.log(lat, long);
+
+                const point = new Point({
+                    latitude: lat,
+                    longitude: long
+                });
+
+                const spatialQuery = new Query();
+                spatialQuery.geometry = point;
+                spatialQuery.distance = 3000;
+                spatialQuery.returnGeometry = true;
+                spatialQuery.outFields = ["*"];
+                spatialQuery.spatialRelationship = 'intersects';
+                spatialQuery.units = 'meters'
+
+                allRoutes2D.queryFeatures(spatialQuery).then(function(res){
+                    
+                    if(res.features.length > 0){
+                        console.log(res);
+                        const featureGeometry = res.features[0].geometry;
+                        const routeName = res.features[0].attributes.StartFinish;
+                        createIAC.create(routeName, res, allRoutes3D, view3D.map.ground.layers.getItemAt(0), divInfoAndChart);
+                        view2D.goTo(featureGeometry);
+                        view3D.goTo(featureGeometry);
+                    } else {
+                        createIAC.resetDivRouteRender(divInfoAndChart);
+                    }
+                });
+
+            });
     });
 
     function goToRoute(element){
