@@ -45,7 +45,6 @@ require([
     });
 
     
-
     const view2D = new MapView({
         container: "secondMap",
         map: map2D,

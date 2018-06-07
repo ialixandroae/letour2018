@@ -9,26 +9,91 @@
     <style>
         html,
         body,
-        .grid-container,
-        .column-16,
-        #mainMap {
+        .grid-container{
             padding: 0;
             margin: 0;
             height: 100%;
             width: 100%;
         }
 
+        .column-16 {
+            padding: 0;
+            width: 100%;
+        }
+
+        #mainMap {
+            padding: 0;
+            margin: 0;
+            margin-top: 5px;
+            border: 1px solid rgba(255,185,1,0.8);
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            height: 100%;
+            width: 100%;
+        }
+
+        .column-8 {
+            margin-top: 5px;
+        }
+
         .upperPane{
             margin-top: 5px;
-            border: 1px solid #000;
+            border: 1px solid rgba(255,185,1,0.8);
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
             height: 35%;
         }
         
         .lowerPane{
             margin-top: 5px;
-            border: 1px solid #000;
-            height: 63%;
+            border: 1px solid rgba(255,185,1,0.8);
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            height: 64%;
             overflow-y: scroll;
+        }
+
+        div.esri-widget-button.esri-widget.esri-interactive,
+        div.esri-component.esri-navigation-toggle.esri-widget {
+            background-color: rgba(255,185,1,0.8);
+            color: #0a000e;
+        }
+
+        .esri-navigation-toggle__button.esri-widget-button.esri-navigation-toggle__button--rotate,
+        .esri-navigation-toggle__button.esri-widget-button.esri-navigation-toggle__button--pan{
+            color: #0a000e;
+        }
+
+        .tab-title.is-active.js-tab{
+            color:rgb(194, 149, 35);
+            background-image: linear-gradient(to top,transparent 94%,rgb(255,185,1) 96%,rgb(255,185,1) 100%);
+        }
+
+        .tab-title.is-active.js-tab:hover,
+        .tab-title.is-active.js-tab:hover:focus,
+        .tab-title.is-active.js-tab:hover:link,
+        .tab-title.is-active.js-tab:active,
+        .tab-title.js-tab:hover,
+        .tab-title.js-tab:hover:focus,
+        .tab-title.js-tab:hover:link {
+            background-image: linear-gradient(to top,transparent 94%,rgb(255,185,1) 96%,rgb(255,185,1) 100%);
+        }
+
+        span.toggle-switch-track.left::after{
+            border-color: rgb(255,185,1);
+        }
+
+        .toggle-switch {
+            margin-left: 10px;
+        }
+
+        .accordion-title:hover{
+            color: rgb(255,185,1);
+        }
+
+        .accordion-content {
+            margin-left: 5px;
+        }
+
+        #tabInfoAndChart{
+            margin-left: 10px;
         }
 
     </style>
@@ -49,19 +114,20 @@
 
 <body>
     <div class="grid-container">
-        <div class="column-8" style="border: 1px solid red; height:100%;">
-            <div class="upperPane" id="secondMap"></div>
+        <div class="column-8" style="height:99%;">
+            <div class="upperPane" id="secondMap">
+            </div>
             <div class="lowerPane">
                 <div class="tabs-transparent trailer-2 js-tab-group">
                     <nav class="tab-nav avenir-light">
-                        <a class="tab-title is-active js-tab">Routes</a>
-                        <a class="tab-title js-tab">About</a>
-                        <a class="tab-title js-tab">Explore</a>
+                        <a class="tab-title is-active js-tab font-size-0">Routes</a>
+                        <a class="tab-title js-tab font-size-0">About</a>
+                        <a class="tab-title js-tab font-size-0">Explore</a>
                     </nav>
                     <section class="tab-contents">
                         <article class="tab-section js-tab-section is-active" >
-                            <p>Click on a route below to gain insights</p>
-                            <button class="btn btn-fill" id="btnResetRoutes"> See all routes </button>
+                            <button class="btn btn-fill" id="btnResetRoutes" style="width:90%; display:block; margin: 0 auto;"> Reset and see all routes </button>
+                            <p style="text-align: center; margin-top: 5px;">Click on a route below to gain insights</p>
                             <aside class="js-accordion accordion is-active" id="routesAccordion">
                                 
                             </aside>
@@ -71,7 +137,7 @@
                             
                         </article>
                         <article class="tab-section js-tab-section" id="tabExplore">
-                            <p>Filter routes by type</p>
+                            <p style="margin-left: 10px;">Filter routes by type</p>
                             <label class="toggle-switch modifier-class clearfix">
                                 <span class="toggle-switch-label right font-size--1">Flat stage</span>
                                 <input type="checkbox" class="toggle-switch-input" id="toggleFS">
@@ -106,8 +172,9 @@
                 </div>
             </div>
         </div>
-        <div class="column-16">
-            <div id="mainMap"></div>
+        <div class="column-16" style="height:99%;">
+            <div id="mainMap">    
+            </div>
         </div>
     </div>
     <script>
