@@ -1,6 +1,6 @@
 define([
     "dojo/_base/declare",
-    "../app/createInfoAndChart.js"
+    "./app/createInfoAndChart.js"
 ], function (
     declare,
     createInfoAndChart

@@ -7,8 +7,8 @@ require([
     "esri/tasks/support/Query",
     "esri/geometry/Point",
     "esri/config",
-    "../app/createInfoAndChart.js",
-    "../app/filterRoutes.js",
+    "./app/createInfoAndChart.js",
+    "./app/filterRoutes.js",
     "dojo/domReady!"
 ], function (WebMap, MapView, SceneView, WebScene, FeatureLayer,
     Query, Point, esriConfig, createInfoAndChart, filterRoutes ) {
