@@ -133,15 +133,13 @@
             }
             
         }
-
-        
-
-
     </style>
 
     <link rel="stylesheet" href="https://js.arcgis.com/4.7/esri/css/main.css">
     <link rel="stylesheet" href="https://s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.0.1/css/calcite-web.min.css">
     <link rel="stylesheet" href="./style/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+        crossorigin="anonymous">
 
     <script type="text/javascript" src="dojoConfig.js"></script>
     <script type="text/javascript" src="https://s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.0.1/js/calcite-web.min.js"></script>
@@ -156,6 +154,14 @@
 <body>
     <div class="grid-container">
         <div class="column-8 tablet-column-12" style="height:99%;">
+            <span id="divLogo" style="position: absolute; z-index: 5; top: 6rem; margin-left: 1rem;">
+                <div>
+                    <a href="https://twitter.com/ialixandroae" target="_blank"><img src="./imgs/logo_twitter.png" style="position: relative; width: 21px; margin-left: 3px;"></a>
+                </div>
+                <div>
+                    <a href="https://github.com/ialixandroae/letour2018" target="_blank"><img src="./imgs/logo_github.png" style="position: relative; width: 25px;"></a>
+                </div>   
+            </span>
             <div class="upperPane" id="secondMap">
             </div>
             <div class="lowerPane">
@@ -214,7 +220,8 @@
             </div>
         </div>
         <div class="column-16" style="height:99%;">
-            <div id="mainMap">    
+
+            <div id="mainMap">   
             </div>
         </div>
     </div>

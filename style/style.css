@@ -6,11 +6,18 @@
 html,
 body {
   font-family: "Avenir Next W01","Avenir Next W00","Avenir Next","Avenir","Helvetica Neue",sans-serif;
-  font-size: 14px;
   width: 100%;
   height: 100%;
   margin: 0px;
   padding: 0px;
+}
+
+#divLogo img {
+	transition: all .2s ease-in-out;
+}
+
+#divLogo img:hover{
+	transform: scale(1.1);
 }
 
 #mainMap {
@@ -399,4 +406,46 @@ a.tab-title{
 .os-phrases h2:nth-child(2) .word2,
 .os-phrases h2:nth-child(4) .word2 {
 	font-weight: 600;
+}
+
+@media (max-width: 1024px) {
+	.os-phrases h2 > span > span  {
+		font-size: 2rem;
+	}
+}
+
+@media (max-width: 820px) {
+	.os-phrases h2 > span > span  {
+		font-size: 1.4rem;
+	}
+}
+
+@media (max-width: 740px) {
+	.os-phrases h2 > span > span  {
+		font-size: 1.3rem;
+	}
+}
+
+@media (max-width: 670px) {
+	.os-phrases h2 > span > span  {
+		font-size: 1.1rem;
+	}
+}
+
+@media (max-width: 640px) {
+	.os-phrases h2 > span > span  {
+		font-size: 1rem;
+	}
+}
+
+@media (max-width: 570px) {
+	.os-phrases h2 > span > span  {
+		font-size: 0.7rem;
+	}
+}
+
+@media (max-width: 400px) {
+	.os-phrases {
+		display: none;
+	}
 }
