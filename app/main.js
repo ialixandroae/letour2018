@@ -33,6 +33,83 @@ require([
         }
     };
 
+    const routesStart2D = new FeatureLayer({
+        url: "https://services6.arcgis.com/MLuUQwq7FiARivuF/arcgis/rest/services/LeTourdeFrance2018_RoutesStart/FeatureServer/0",
+        outFields: ["*"],
+        renderer : {
+            type: 'simple',
+            symbol: {
+                type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
+                color: "#ef7204",
+                size: 6,
+                outline: { // autocasts as new SimpleLineSymbol()
+                    color: "#0a000e",
+                    width: 1
+                }
+            }
+        }
+    });
+
+    const routesStart3D = new FeatureLayer({
+        url: "https://services6.arcgis.com/MLuUQwq7FiARivuF/arcgis/rest/services/LeTourdeFrance2018_RoutesStart/FeatureServer",
+        elevationInfo: {
+            // elevation mode that will place points on top of the buildings or other SceneLayer 3D objects
+            mode: "relative-to-ground"
+        },
+        renderer: {
+            type: 'simple',
+            symbol: {
+                type: "point-3d",  // autocasts as new PointSymbol3D()
+                symbolLayers: [{
+                    type: "icon",  // autocasts as new IconSymbol3DLayer()
+                    resource: { primite: "circle"},
+                    material: { color: "#ef7204" },
+                    size: 12,
+                    outline: {
+                        color: "#0a000e",
+                        size: 1
+                    }
+                }],
+                verticalOffset: {
+                    screenLength: 300,
+                    maxWorldLength: 5000,
+                    minWorldLength: 30
+                },
+                callout: {
+                    type: "line", // autocasts as new LineCallout3D()
+                    color: "#ef7204",
+                    size: 0.5,
+                    border: {
+                        color: "#ef7204"
+                    }
+                }
+            }
+        },
+        outFields: ["*"],
+        labelingInfo: [
+            {
+                labelExpressionInfo: {
+                    value: "{Name}"
+                },
+                symbol: {
+                    type: "label-3d", // autocasts as new LabelSymbol3D()
+                    symbolLayers: [{
+                        type: "text", // autocasts as new TextSymbol3DLayer()
+                        material: {
+                            color: "white"
+                        },
+                        // we set a halo on the font to make the labels more visible with any kind of background
+                        halo: {
+                            size: 1,
+                            color: "#0a000e"
+                        },
+                        size: 12
+                    }]
+                }
+            }],
+        labelsVisible: true
+    });
+
     const allRoutes3D = new FeatureLayer({
         url: 'https://services6.arcgis.com/MLuUQwq7FiARivuF/arcgis/rest/services/LeTourdeFrance2018_Routes/FeatureServer/0',
         outFields: ['*'],
@@ -117,7 +194,9 @@ require([
             heading: 0
         }).then(function () {
             map3D.add(allRoutes3D);
+            map3D.add(routesStart3D);
             map2D.add(allRoutes2D);
+            map2D.add(routesStart2D);
         }).then(function () {
             allRoutes2D.queryFeatures()
                 .then(function (results) {
@@ -154,7 +233,7 @@ require([
                         });
                     });
                     
-                    fltrRoutes.init([allRoutes2D, allRoutes3D], divInfoAndChart, view3D, view2D);
+                    fltrRoutes.init([allRoutes2D, allRoutes3D, routesStart2D, routesStart3D], divInfoAndChart, view3D, view2D);
 
                     btnResetRoutes.addEventListener('click', function () {
                         createIAC.resetDivRouteRender(divInfoAndChart);
@@ -169,6 +248,9 @@ require([
 
                         allRoutes2D.definitionExpression = "1=1";
                         allRoutes3D.definitionExpression = "1=1";
+                        routesStart2D.definitionExpression = "1=1";
+                        routesStart3D.definitionExpression = "1=1";
+                        
                         view3D.popup.visible = false;
                         
                         view3D.goTo({
@@ -190,11 +272,10 @@ require([
     view3D.on("click", event => {
         view3D.hitTest(event)
             .then(function (response) {
-                console.log(response);
+                
                 const lat = response.results[0].mapPoint.latitude;
                 const long = response.results[0].mapPoint.longitude;
-                console.log(lat, long);
-
+            
                 const point = new Point({
                     latitude: lat,
                     longitude: long
@@ -257,6 +338,8 @@ require([
                             createIAC.create(element.getElementsByClassName('accordion-title')[0].textContent, route, allRoutes3D, view3D.map.ground.layers.getItemAt(0), divInfoAndChart, view3D);
                             allRoutes3D.definitionExpression = `StartFinish = '${element.getElementsByClassName('accordion-title')[0].textContent}'`;
                             allRoutes2D.definitionExpression = `StartFinish = '${element.getElementsByClassName('accordion-title')[0].textContent}'`;
+                            routesStart2D.definitionExpression = `StartFinish = '${element.getElementsByClassName('accordion-title')[0].textContent}'`;
+                            routesStart3D.definitionExpression = `StartFinish = '${element.getElementsByClassName('accordion-title')[0].textContent}'`;
                             view3D.goTo(
                                 {
                                     target: route.features[0].geometry
