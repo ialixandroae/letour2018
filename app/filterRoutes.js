@@ -6,17 +6,33 @@ define([
     createInfoAndChart
 ) {
         var clazz = {
-            init: function (routesLyr, divRender){
+            init: function (routesLyr, divRender, view3D, view2D){
                 
+                let highlight;
                 const createIAC = createInfoAndChart;
 
                 const toggles = document.getElementsByClassName('toggle-switch-input');
+                
                 Array.from(toggles).forEach(function(toggle){
                     toggle.addEventListener('click', function(tog){
                         if(tog.target.checked == true){
                             const routesType = tog.path[1].getElementsByTagName("span")[0].innerText;
                             
                             createIAC.resetDivRouteRender(divRender);
+                    
+                            view3D.popup.visible = false;
+                            view3D.goTo({
+                                center: [3, 46],
+                                zoom: 7,
+                                tilt: 40,
+                                heading: 0
+                            });
+                            view2D.goTo({
+                                center: [4.5, 46],
+                                zoom: 5
+                            });
+                            
+
                             routesLyr.forEach(function(route){
                                 route.definitionExpression = `Type = '${routesType}'`;
                             });
@@ -25,13 +41,12 @@ define([
                             const _toggles = document.getElementsByClassName('toggle-switch-input');
                             
                             Array.from(_toggles).forEach(function (_toggle) {
-                                console.log(_toggle);
+                    
                                 if (_toggle.id !== source && _toggle.checked == true) {
                                     _toggle.checked = false;
                                     _toggle.nextElementSibling.style.backgroundColor = 'white';
                                 }
                                 if(_toggle.id == source){
-                                    console.log(_toggle.nextElementSibling)
                                     _toggle.nextElementSibling.style.backgroundColor = '#FFB901';
                                     _toggle.nextElementSibling.style.borderColor = '#FFB901';
                                     

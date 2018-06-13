@@ -1,11 +1,17 @@
 define([
     "dojo/_base/declare",
+    "esri/geometry/Point",
+    "esri/geometry/Polyline",
+    "esri/geometry/geometryEngine"
 ], function(
-    declare
+    declare,
+    Point,
+    Polyline,
+    geometryEngine
 ){
     var clazz = {
-        create: function(routeName, route, allRoutes, ground, divRender){
-            console.log(routeName, route, allRoutes, ground, divRender)
+        create: function(routeName, route, allRoutes, ground, divRender, view){
+            
             const routeGeometry = route.features[0].geometry;
             const routeDescription = route.features[0].attributes.Overview;
             const routeLength = route.features[0].attributes.Distance;
@@ -28,7 +34,7 @@ define([
             divRouteDescription.innerHTML = routeDescription;
 
             const divRouteChart = document.createElement('div');
-            divRouteChart.style.height = '500px';
+            divRouteChart.style.height = '200px';
             divRouteChart.style.width = '100%';
 
             divRender.appendChild(divStageName);
@@ -41,157 +47,147 @@ define([
                 
                 demResolution: "finest-contiguous"
             }).then((response) => {
+               
+                let routeData = getProperties();
+                let data;
+                if(routeData[0].length > 500){
+                    data = routeData[0].filter(function (route) {
+                        return route.length % 1 == 0;
+                    });
+                } else {
+                    data = routeData[0];
+                }
                 
-                console.log(response.geometry);
-                console.log(response);
+                // Functie prelucrare date din geometrie linie 
+                // Intoarce un array de obiecte care sunt folosite ca input in grafic
+                // Credits: Raluca Nicola -> https://github.com/RalucaNicola/hiking-app/blob/master/src/ts/data/Trail.ts 
+                function getProperties() {
 
-                // Functie care sa creeze graficul in functie de paths.
-                // A se folosi geometry  engine geodesicLength() care primeste obiect Polyline obtinut din paths
+                    const points = [];
+                    let totalLength = 0;
+                    let segmentLength = 0;
+                    const path = getLongestPath();
+                    const segments = [path[0]];
+                    let i = 0, j;
+                    points.push({ point: path[0], length: totalLength, value: Math.round(path[0][2]) });
+                    while(i <path.length) {
+                        for (j = i + 1; j < path.length; j++) {
+
+                            const length = computeLength(path.slice(i, j + 1));
+
+                            segmentLength += length;
+                            if (segmentLength > 2000) {
+                                const distance = computeLength([segments[segments.length - 1], path[j]]);
+                                if (distance > 1000) {
+                                    segments.push(path[j]);
+                                    segmentLength = 0;
+                                }
+                            }
+
+                            if (length > 150) {
+                                totalLength += length;
+                                points.push({ point: path[j], length: Math.round(totalLength / 100) / 10, value: Math.round(path[i][2]) });
+                                break;
+                            }
+                        }
+                        i = j;
+                    }
+                    return [points, segments];
+                };
+
+                function getLongestPath() {
+                    let longestPath = null;
+                    let maxPathLength = 0;
+                    for (const path of response.geometry.paths) {
+                        const length = computeLength(path);
+                        if (length > maxPathLength) {
+                            maxPathLength = length;
+                            longestPath = path;
+                        };
+                    };
+
+                    return longestPath;
+                };
+
+                function computeLength(path){
+                    return geometryEngine.geodesicLength(new Polyline({
+                        paths: [path],
+                        hasZ: true,
+                        spatialReference: { wkid: 4326 }
+                    }), "meters");
+
+                };
                 
-                var chart = AmCharts.makeChart(divRouteChart, {
+                // Chart creation
+                const chart = AmCharts.makeChart(divRouteChart, {
                     "type": "serial",
-                    "theme": "light",
-                    "legend": {
-                        "align": "center",
-                        "equalWidths": false,
-                        "periodValueText": "total: [[value.sum]]",
-                        "valueAlign": "left",
-                        "valueText": "[[value]] ([[percents]]%)",
-                        "valueWidth": 100
+                    "dataProvider": data,
+                    "color": "#4b4b4b",
+                    "balloon": {
+                        "borderAlpha": 0,
+                        "fillAlpha": 0.8,
+                        "fillColor": "#FFB901",
+                        "shadowAlpha": 0
                     },
-                    "dataProvider": [{
-                        "year": "2000",
-                        "cars": 1587,
-                        "motorcycles": 650,
-                        "bicycles": 121
-                    }, {
-                        "year": "1995",
-                        "cars": 1567,
-                        "motorcycles": 683,
-                        "bicycles": 146
-                    }, {
-                        "year": "1996",
-                        "cars": 1617,
-                        "motorcycles": 691,
-                        "bicycles": 138
-                    }, {
-                        "year": "1997",
-                        "cars": 1630,
-                        "motorcycles": 642,
-                        "bicycles": 127
-                    }, {
-                        "year": "1998",
-                        "cars": 1660,
-                        "motorcycles": 699,
-                        "bicycles": 105
-                    }, {
-                        "year": "1999",
-                        "cars": 1683,
-                        "motorcycles": 721,
-                        "bicycles": 109
-                    }, {
-                        "year": "2000",
-                        "cars": 1691,
-                        "motorcycles": 737,
-                        "bicycles": 112
-                    }, {
-                        "year": "2001",
-                        "cars": 1298,
-                        "motorcycles": 680,
-                        "bicycles": 101
-                    }, {
-                        "year": "2002",
-                        "cars": 1275,
-                        "motorcycles": 664,
-                        "bicycles": 97
-                    }, {
-                        "year": "2003",
-                        "cars": 1246,
-                        "motorcycles": 648,
-                        "bicycles": 93
-                    }, {
-                        "year": "2004",
-                        "cars": 1218,
-                        "motorcycles": 637,
-                        "bicycles": 101
-                    }, {
-                        "year": "2005",
-                        "cars": 1213,
-                        "motorcycles": 633,
-                        "bicycles": 87
-                    }, {
-                        "year": "2006",
-                        "cars": 1199,
-                        "motorcycles": 621,
-                        "bicycles": 79
-                    }, {
-                        "year": "2007",
-                        "cars": 1110,
-                        "motorcycles": 210,
-                        "bicycles": 81
-                    }, {
-                        "year": "2008",
-                        "cars": 1165,
-                        "motorcycles": 232,
-                        "bicycles": 75
-                    }, {
-                        "year": "2009",
-                        "cars": 1145,
-                        "motorcycles": 219,
-                        "bicycles": 88
-                    }, {
-                        "year": "2010",
-                        "cars": 1163,
-                        "motorcycles": 201,
-                        "bicycles": 82
-                    }, {
-                        "year": "2011",
-                        "cars": 1180,
-                        "motorcycles": 285,
-                        "bicycles": 87
-                    }, {
-                        "year": "2012",
-                        "cars": 1159,
-                        "motorcycles": 277,
-                        "bicycles": 71
-                    }],
-                    "valueAxes": [{
-                        "stackType": "regular",
-                        "gridAlpha": 0.07,
-                        "position": "left",
-                        "title": "percent"
-                    }],
                     "graphs": [{
-                        "fillAlphas": 0.5,
-                        "lineAlpha": 0.5,
-                        "title": "Cars",
-                        "valueField": "cars",
-                        "index": 2
-                    }, {
-                        "fillAlphas": 0.5,
-                        "lineAlpha": 0.5,
-                        "title": "Motorcycles",
-                        "valueField": "motorcycles",
-                        "index": 3
-                    }, {
-                        "fillAlphas": 0.5,
-                        "lineAlpha": 0.5,
-                        "title": "Bicycles",
-                        "valueField": "bicycles",
-                        "index": 1
+                        "id": "g1",
+                        "balloonText": "Distance: <b>[[category]] km</b><br>Elevation:<b>[[value]] m</b>",
+                        "fillAlphas": 0.2,
+                        "bulletAlpha": 0,
+                        "lineColor": "#FFB901",
+                        "lineThickness": 1,
+                        "valueField": "value"
                     }],
-                    "plotAreaBorderAlpha": 0,
-                    "marginLeft": 0,
-                    "marginBottom": 0,
                     "chartCursor": {
-                        "cursorAlpha": 0,
+                        "limitToGraph": "g1",
+                        "categoryBalloonEnabled": false,
                         "zoomable": false
                     },
-                    "categoryField": "year",
+                    "categoryField": "length",
                     "categoryAxis": {
-                        "startOnAxis": true,
-                        "axisColor": "#DADADA",
-                        "gridAlpha": 0.07
+                        "gridThickness": 0,
+                        "axisThickness": 0.1
+                    },
+                    "valueAxes": [{
+                        "strictMinMax": false,
+                        "autoGridCount": false,
+                        "minimum": 0,
+                        "maximum": "auto",
+                        "axisThickness": 0,
+                        "tickLength": 0
+                    }]
+                    
+                });
+
+                const popup = view.popup;
+                
+                chart.addListener("changed", (e) => {
+                    
+                    if (e.index) {
+                        const datas = e.chart.dataProvider[e.index];
+                        
+                        popup.dockEnabled = false;
+                        popup.open({
+                            title: "Elevation: " + datas.value + " m",
+                            location: new Point({
+                                spatialReference: { wkid: 4326 },
+                                longitude: datas.point[0],
+                                latitude: datas.point[1],
+                                z: datas.point[2]
+                            })
+                        });
+                        popup.collapsed = true;
+                        
+                        document.getElementsByClassName('esri-popup__main-container')[0].style.maxHeight = "50px";
+                        document.getElementsByClassName('esri-popup__main-container')[0].style.width = "150px";
+                    } else {
+                        document.getElementsByClassName('esri-popup__main-container')[0].style.maxHeight = "80%";
+                        document.getElementsByClassName('esri-popup__main-container')[0].style.width = "340px";
+                        popup.collapsed = false;
+                        popup.dockEnabled = true;
+                        popup.dockOptions.position = "top-right";
+                        popup.title = routeName + " - " + routeLength + " km";
+                        popup.content = routeDescription;
                     }
                 });
             });

@@ -51,7 +51,7 @@
         }
 
         div.esri-widget-button.esri-widget.esri-interactive,
-        div.esri-component.esri-navigation-toggle.esri-widget {
+        .esri-component.esri-navigation-toggle.esri-widget {
             background-color: rgba(255,185,1,0.8);
             color: #0a000e;
         }
@@ -103,13 +103,39 @@
             background-image:linear-gradient(rgba(255,255,255,.2),rgba(255,255,255,.5),rgba(255,255,255,.7), rgba(255,255,255,.8)),url('./imgs/letourlogo.png');
         }
 
-        .esri-popup__content div p{
+        .esri-popup__content div p,
+        .esri-popup__main-container.esri-widget.esri-popup--shadow div{
             font-size: 1rem;
         }
 
         .esri-view-height-less-than-medium .esri-popup__main-container {
             height: 50vh;
         }
+
+        div.esri-popup__header-buttons,
+        div.esri-popup__feature-buttons {
+            display: none;
+        }
+
+        .esri-popup__main-container.esri-widget,
+        .esri-popup__pointer-direction.esri-popup--shadow {
+            background: rgba(255,185,1,0.8);
+        }
+
+        @media (max-width: 859px) {
+
+            .upperPane {
+                height: 40%;
+            }
+
+            .lowerPane {
+                height: 55%;
+            }
+            
+        }
+
+        
+
 
     </style>
 
@@ -129,7 +155,7 @@
 
 <body>
     <div class="grid-container">
-        <div class="column-8" style="height:99%;">
+        <div class="column-8 tablet-column-12" style="height:99%;">
             <div class="upperPane" id="secondMap">
             </div>
             <div class="lowerPane">
@@ -142,7 +168,7 @@
                     <section class="tab-contents">
                         <article class="tab-section js-tab-section is-active" >
                             <button class="btn btn-fill" id="btnResetRoutes" style="width:90%; display:block; margin: 0 auto;"> Reset and see all routes </button>
-                            <p style="text-align: center; margin-top: 5px;">Click on a route below to gain insights</p>
+                            <p style="text-align: center; margin-top: 5px;">Click on a route below to filter routes and gain insights</p>
                             <aside class="js-accordion accordion is-active" id="routesAccordion">
                                 
                             </aside>
